@@ -7,12 +7,18 @@ import { PostsComponent } from './pages/posts/posts.component';
 import { HeaderComponent } from './component/header/header.component';
 import { RouterModule } from '@angular/router';
 import { HttpClientModule } from '@angular/common/http';
+import { ParentComponent } from './parent/parent.component';
+import { ChildComponent } from './child/child.component';
+import { HomeComponent } from './pages/home/home.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     HeaderComponent,
-    PostsComponent
+    PostsComponent,
+    ParentComponent,
+    ChildComponent,
+    HomeComponent
   ],
   imports: [
     BrowserModule,
