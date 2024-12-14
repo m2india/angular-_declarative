@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { IPost } from '../models/Ipost';
-import { combineLatest, forkJoin, map } from 'rxjs';
+import { combineLatest, map, tap } from 'rxjs';
 import { DeclarativeCategoryService } from './declarative-category.service';
 
 @Injectable({
@@ -9,33 +9,41 @@ import { DeclarativeCategoryService } from './declarative-category.service';
 })
 export class DeclarativeService {
 
-  private url = 'https://ng-declarative-default-rtdb.firebaseio.com/posts.json';
-  
-  posts$ = this.http.get<{[id: string]: IPost}>(`${this.url}`)
-  .pipe(map( posts => {
-    let postsData: IPost[] =[];
-    for (const id in posts) {
-      if (posts.hasOwnProperty(id)) {
-        postsData.push({ ...posts[id], id });
+  // Correct URL for posts (assumed you have a different endpoint for posts)
+  private postsUrl = 'https://ng-declarative-default-rtdb.firebaseio.com/posts.json'; 
+
+  // Corrected observable for posts
+  posts$ = this.http.get<{[id: string]: IPost}>(`${this.postsUrl}`).pipe(
+    map(posts => {
+      let postsData: IPost[] = [];
+      for (const id in posts) {
+        if (posts.hasOwnProperty(id)) {
+          postsData.push({ ...posts[id], id });
+        }
       }
-    }
-    return postsData;
-    
-  } ));
-
-
-
-  postsWithCategory$ = forkJoin([this.posts$, this.categoryService.categories$]).pipe(
-    map(([posts, categories]) => 
-      posts.map((post) => {
-        return {
-          ...post, // Spread the individual post object
-          categoryName: categories.find((category) => category.id === post.category_ref)?.name
-        };
-      })
-    )
+      return postsData;
+    })
   );
-  
 
-  constructor(private http:HttpClient, private categoryService: DeclarativeCategoryService) { }
+  // Observable for posts with category
+  postsWithCategory$ = combineLatest([this.posts$, this.categoryService.categories$]).pipe(
+    // Log posts and categories before any transformation
+    tap(([posts, categories]) => {
+      console.log('Posts:', posts);  // Log the posts data
+      console.log('Categories:', categories);  // Log the categories data
+    }),
+    map(([posts, categories]) =>
+      posts.map((post) => ({
+        ...post,  // Spread the individual post object
+        categoryName: categories.find((category) => category.id === post.category_ref)?.name || 'Unknown Category'
+      }))
+    ),
+    // Log the final transformed posts with category names
+    tap((updatedPosts) => {
+      console.log('Updated Posts with Categories:', updatedPosts);
+    })
+  );
+
+  constructor(private http: HttpClient, private categoryService: DeclarativeCategoryService) { }
 }
+
