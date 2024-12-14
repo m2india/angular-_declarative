@@ -4,6 +4,6 @@ export interface IPost{
     content: string;
     author: string;
     published_date: string;
-    category_ref: string;
+    category_ref: any;
     categoryName?: string;
 }

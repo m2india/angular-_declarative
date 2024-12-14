@@ -9,7 +9,7 @@ import { map } from 'rxjs';
 export class DeclarativeCategoryService {
 
 
-  private url = 'https://ng-declarative-default-rtdb.firebaseio.com/posts.json';
+  private url = 'https://ng-declarative-default-rtdb.firebaseio.com/categories.json';
 
   categories$ = this.http.get<{[id: string] : ICategory}>(`${this.url}`)
   .pipe( map ( categories => {
