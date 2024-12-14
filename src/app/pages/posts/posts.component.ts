@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ComponentRef, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ComponentRef, NgZone, OnDestroy, OnInit } from '@angular/core';
 import { interval, Subscription } from 'rxjs';
 import { IPost } from 'src/app/models/Ipost';
 import { PostService } from 'src/app/service/post.service';
@@ -12,19 +12,17 @@ import { PostService } from 'src/app/service/post.service';
 export class PostsComponent implements OnInit, OnDestroy {
   
   posts: IPost[] = [];
-  postsSubscription !: Subscription;
-  intervalSubscription !: Subscription;
+  postsSubscription : Subscription;
+  intervalSubscription : Subscription;
 
-  constructor(private postServices: PostService, private ref: ChangeDetectorRef){}
+  constructor(private postServices: PostService, private ref: ChangeDetectorRef, private zone: NgZone){}
   
 
   ngOnInit(): void {
-    this. getPosts();
+    this.getPosts();
   }
 
   getPosts(){
-
-
     this.intervalSubscription = interval(1000).subscribe({
       next: (data) => {
         console.log(data); 
@@ -36,31 +34,27 @@ export class PostsComponent implements OnInit, OnDestroy {
         console.log("complete interval");
         
       }
-    })
+    });
 
     this.postsSubscription = this.postServices
     .getPostWithCategory()
     .subscribe({
       next: (data) => {
-        console.log(data); 
-        this.posts = data;
-        // this.ref.detectChanges();
+        this.zone.run(() => { // Ensure change detection triggers
+          this.posts = data;
+          this.ref.detectChanges(); // Explicitly notify Angular
+        });
       },
       error : (error) => {
         console.log(error);
-        
       },
       complete : () => {
         console.log("complete http call");
         
       }
-    })
-    // .subscribe(
-    //   (data) => {
-    //   this.posts = data,
-    //   this.ref.detectChanges();
-    // })
+    });
   }
+  
 
   ngOnDestroy(): void {
     // throw new Error('Method not implemented.');

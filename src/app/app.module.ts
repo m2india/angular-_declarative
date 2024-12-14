@@ -10,6 +10,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { ParentComponent } from './parent/parent.component';
 import { ChildComponent } from './child/child.component';
 import { HomeComponent } from './pages/home/home.component';
+import { DeclarativeComponent } from './pages/declarative/declarative.component';
 
 @NgModule({
   declarations: [
@@ -18,7 +19,8 @@ import { HomeComponent } from './pages/home/home.component';
     PostsComponent,
     ParentComponent,
     ChildComponent,
-    HomeComponent
+    HomeComponent,
+    DeclarativeComponent
   ],
   imports: [
     BrowserModule,
