@@ -23,18 +23,21 @@ export class PostsComponent implements OnInit, OnDestroy {
   }
 
   getPosts(){
-    this.intervalSubscription = interval(1000).subscribe({
-      next: (data) => {
-        console.log(data); 
-      },
-      error : (error) => {
-        console.log(error);
-      },
-      complete : () => {
-        console.log("complete interval");
+    // this.intervalSubscription = interval(10).subscribe({
+    //   next: (data) => {
+    //     this.zone.run(() => {
+    //       console.log(data); 
+    //       this.ref.detectChanges(); // Explicitly notify Angular
+    //     })
         
-      }
-    });
+    //   },
+    //   error : (error) => {
+    //     console.log(error);
+    //   },
+    //   complete : () => {
+    //     console.log("complete interval");
+    //   }
+    // });
 
     this.postsSubscription = this.postServices
     .getPostWithCategory()
