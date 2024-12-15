@@ -1,4 +1,4 @@
-<div *ngIf="getFilterPost$ | async as post">
+<div *ngIf="singleClickPost$ | async as post">
     <div>Id : {{post.id}}</div>
     <div>Title : {{post.title}}</div>
     <div>Description : {{post.content}}</div>

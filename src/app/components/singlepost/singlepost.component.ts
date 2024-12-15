@@ -8,8 +8,8 @@ import { DeclarativeService } from 'src/app/service/declarative.service';
 })
 export class SinglepostComponent implements OnInit {
 
-  getFilterPost$ = this.singlePostSerivice.filterPost$;
-  
+  singleClickPost$ = this.singlePostSerivice.filterPost$;
+
   constructor(private singlePostSerivice : DeclarativeService){}
 
   ngOnInit(): void {
