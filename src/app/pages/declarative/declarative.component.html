@@ -4,14 +4,14 @@
 
         <div class="row">
             <div class="col-md-4">
-                <select (change)="onChange($event)">
+                <select (change)="onCategoryChange($event)">
                     <option value="">Select Category</option>
                     <option [value]="cate.id" *ngFor="let cate of getCategories$ | async">{{cate.name}}</option>
                 </select>
             </div>
         </div>
 
-        <table class="table" *ngIf="composts$ | async as posts">
+        <table class="table" *ngIf="filterPost$ | async as posts">
             <thead>
               <tr>
                 <th scope="col">#</th>

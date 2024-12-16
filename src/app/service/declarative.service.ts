@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { IPost } from '../models/Ipost';
-import { combineLatest, map, tap } from 'rxjs';
+import { BehaviorSubject, combineLatest, map, Subject, tap } from 'rxjs';
 import { DeclarativeCategoryService } from './declarative-category.service';
 
 @Injectable({
@@ -43,6 +43,24 @@ export class DeclarativeService {
       console.log('Updated Posts with Categories:', updatedPosts);
     })
   );
+
+  private selectedPostSubject = new Subject<string>(); // Provide an initial value
+  selectedPostAction$ = this.selectedPostSubject.asObservable();
+
+  filterPost$ = combineLatest([
+    this.postsWithCategory$,
+    this.selectedPostAction$])
+    .pipe(
+    map(([posts, selectPostId]) => {
+      return posts.find((post) => post.id == selectPostId );
+    })
+  );
+
+  selectPost(postId: string){
+    this.selectedPostSubject.next(postId);
+  }
+
+
 
   constructor(private http: HttpClient, private categoryService: DeclarativeCategoryService) { }
 }
