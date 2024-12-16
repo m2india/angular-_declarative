@@ -17,8 +17,7 @@ export class AltPostsComponent {
 
   onSelectPost(post: IPost, event: Event){
     event.preventDefault();
-    console.log(post);
     post.id && this.declarativeServices.selectPost(post.id);
-    
+    // console.log(post);
   }
 }

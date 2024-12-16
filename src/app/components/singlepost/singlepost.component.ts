@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { catchError, EMPTY } from 'rxjs';
 import { DeclarativeService } from 'src/app/service/declarative.service';
 
 @Component({
@@ -8,7 +9,13 @@ import { DeclarativeService } from 'src/app/service/declarative.service';
 })
 export class SinglepostComponent implements OnInit {
 
-  singleClickPost$ = this.singlePostSerivice.filterPost$;
+  errorMessage = '';
+  singleClickPost$ = this.singlePostSerivice.filterPost$.pipe(
+    catchError((error: string) => {
+      this.errorMessage = error;
+      return EMPTY;
+    })
+  )
 
   constructor(private singlePostSerivice : DeclarativeService){}
 

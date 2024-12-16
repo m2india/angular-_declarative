@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { IPost } from '../models/Ipost';
-import { BehaviorSubject, combineLatest, map, Subject, tap } from 'rxjs';
+import { BehaviorSubject, catchError, combineLatest, map, Subject, tap, throwError } from 'rxjs';
 import { DeclarativeCategoryService } from './declarative-category.service';
 
 @Injectable({
@@ -22,7 +22,8 @@ export class DeclarativeService {
         }
       }
       return postsData;
-    })
+    }),
+    catchError(this.handleError)
   );
 
   // Observable for posts with category
@@ -53,7 +54,8 @@ export class DeclarativeService {
     .pipe(
     map(([posts, selectPostId]) => {
       return posts.find((post) => post.id == selectPostId );
-    })
+    }),
+    catchError(this.handleError)
   );
 
   selectPost(postId: string){
@@ -63,5 +65,12 @@ export class DeclarativeService {
 
 
   constructor(private http: HttpClient, private categoryService: DeclarativeCategoryService) { }
-}
 
+
+  handleError(error: Error){
+    return throwError(() => {
+      return 'unknow error occured. Please try again';
+    })
+  }
+
+}
