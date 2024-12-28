@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { BehaviorSubject, combineLatest, map, Subject, tap } from 'rxjs';
 import { DeclarativeCategoryService } from 'src/app/service/declarative-category.service';
 import { DeclarativeService } from 'src/app/service/declarative.service';
+import { LoaderServiceService } from 'src/app/service/loader-service.service';
 
 @Component({
   selector: 'app-declarative',
@@ -27,6 +28,7 @@ export class DeclarativeComponent implements OnInit {
         tap(([posts, selectCategoryId]) => {
           console.log('Posts before filtering:', posts);
           console.log('Selected Category ID:', selectCategoryId);
+          this.loaderService.hideLoader();
         }),
         map(([posts, selectCategoryId]) => {
           return posts.filter( x => selectCategoryId ? x.category_ref == selectCategoryId : true)
@@ -38,11 +40,11 @@ export class DeclarativeComponent implements OnInit {
   
 
 
-  constructor(private declarativeServices: DeclarativeService, private categoryServices: DeclarativeCategoryService){}
+  constructor(private declarativeServices: DeclarativeService, private categoryServices: DeclarativeCategoryService, private loaderService: LoaderServiceService){}
 
   ngOnInit(): void {
     console.log("composts$", this.getposts$);
-    
+    this.loaderService.showLoader();
   }
 
   onCategoryChange(event: Event){

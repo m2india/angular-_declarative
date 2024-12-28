@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { LoaderServiceService } from './service/loader-service.service';
 
 @Component({
   selector: 'app-root',
@@ -7,4 +8,6 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'Angular-Declarative';
+  showLoader$ = this.loaderService.loadingAction$;
+  constructor(private loaderService: LoaderServiceService){}
 }

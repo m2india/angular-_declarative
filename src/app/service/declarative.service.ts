@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { IPost } from '../models/Ipost';
-import { BehaviorSubject, catchError, combineLatest, map, Subject, tap, throwError } from 'rxjs';
+import { BehaviorSubject, catchError, combineLatest, delay, map, share, shareReplay, Subject, tap, throwError } from 'rxjs';
 import { DeclarativeCategoryService } from './declarative-category.service';
 
 @Injectable({
@@ -13,7 +13,9 @@ export class DeclarativeService {
   private postsUrl = 'https://ng-declarative-default-rtdb.firebaseio.com/posts.json'; 
 
   // Corrected observable for posts
-  posts$ = this.http.get<{[id: string]: IPost}>(`${this.postsUrl}`).pipe(
+  posts$ = this.http.get<{[id: string]: IPost}>(`${this.postsUrl}`)
+  .pipe(
+    delay(100),
     map(posts => {
       let postsData: IPost[] = [];
       for (const id in posts) {
@@ -23,7 +25,8 @@ export class DeclarativeService {
       }
       return postsData;
     }),
-    catchError(this.handleError)
+    catchError(this.handleError),
+    share()
   );
 
   // Observable for posts with category
@@ -45,7 +48,7 @@ export class DeclarativeService {
     })
   );
 
-  private selectedPostSubject = new Subject<string>(); // Provide an initial value
+  private selectedPostSubject = new BehaviorSubject<string | null>(null); // Provide an initial value
   selectedPostAction$ = this.selectedPostSubject.asObservable();
 
   filterPost$ = combineLatest([

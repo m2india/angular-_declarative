@@ -13,6 +13,7 @@ import { HomeComponent } from './pages/home/home.component';
 import { DeclarativeComponent } from './pages/declarative/declarative.component';
 import { AltPostsComponent } from './pages/alt-posts/alt-posts.component';
 import { SinglepostComponent } from './components/singlepost/singlepost.component';
+import { LoadingComponent } from './components/loading/loading.component';
 
 @NgModule({
   declarations: [
@@ -24,7 +25,8 @@ import { SinglepostComponent } from './components/singlepost/singlepost.componen
     HomeComponent,
     DeclarativeComponent,
     AltPostsComponent,
-    SinglepostComponent
+    SinglepostComponent,
+    LoadingComponent
   ],
   imports: [
     BrowserModule,

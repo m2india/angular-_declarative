@@ -1,0 +1,33 @@
+.loader-container {
+    position: fixed;       /* Ensures the loader stays in the same position */
+    top: 0;                /* Aligns to the top of the viewport */
+    left: 0;               /* Aligns to the left of the viewport */
+    width: 100vw;          /* Full width of the viewport */
+    height: 100vh;         /* Full height of the viewport */
+    background: rgba(0, 0, 0, 0.5); /* Optional: Adds a semi-transparent background */
+    display: flex;         /* Flexbox for centering */
+    justify-content: center; /* Centers horizontally */
+    align-items: center;    /* Centers vertically */
+    z-index: 9999;         /* Ensures it appears above other content */
+  }
+  
+  .loader {
+    width: 48px;
+    height: 48px;
+    border: 5px solid #FFF;
+    border-bottom-color: #FF3D00;
+    border-radius: 50%;
+    display: inline-block;
+    box-sizing: border-box;
+    animation: rotation 1s linear infinite;
+  }
+  
+  @keyframes rotation {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+  
